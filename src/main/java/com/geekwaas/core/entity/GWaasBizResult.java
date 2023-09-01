@@ -1,6 +1,6 @@
-package com.geekwaas.core;
+package com.geekwaas.core.entity;
 
-public class GWaasErrorResponse {
+public class GWaasBizResult {
     private BizCode bizCode;
     private String errorCode;
     private String message;
@@ -9,7 +9,7 @@ public class GWaasErrorResponse {
         return bizCode;
     }
 
-    public GWaasErrorResponse setBizCode(BizCode bizCode) {
+    public GWaasBizResult setBizCode(BizCode bizCode) {
         this.bizCode = bizCode;
         return this;
     }
@@ -18,7 +18,7 @@ public class GWaasErrorResponse {
         return errorCode;
     }
 
-    public GWaasErrorResponse setErrorCode(String errorCode) {
+    public GWaasBizResult setErrorCode(String errorCode) {
         this.errorCode = errorCode;
         return this;
     }
@@ -27,7 +27,7 @@ public class GWaasErrorResponse {
         return message;
     }
 
-    public GWaasErrorResponse setMessage(String message) {
+    public GWaasBizResult setMessage(String message) {
         this.message = message;
         return this;
     }

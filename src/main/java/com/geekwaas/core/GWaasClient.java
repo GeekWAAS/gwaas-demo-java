@@ -4,6 +4,9 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.geekwaas.core.entity.GWaasBizResult;
+import com.geekwaas.core.security.RSA2Signature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,6 +29,7 @@ public class GWaasClient {
     public GWaasClient(GWaasClientConfig clientConfig) {
         this.clientConfig = clientConfig;
         this.objectMapper = new ObjectMapper()
+                .registerModule(new JavaTimeModule())
                 .setDefaultPropertyInclusion(JsonInclude.Include.NON_NULL)
                 .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
                 .setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE);
@@ -77,7 +81,7 @@ public class GWaasClient {
             try (InputStream in = con.getInputStream();
                  BufferedReader reader = new BufferedReader(new InputStreamReader(in))) {
                 String response = reader.lines().collect(Collectors.joining());
-                GWaasErrorResponse error = objectMapper.readValue(response, GWaasErrorResponse.class);
+                GWaasBizResult error = objectMapper.readValue(response, GWaasBizResult.class);
                 logger.error("{} - {} - {}", error.getBizCode(), error.getErrorCode(), error.getMessage());
                 throw new RuntimeException(String.format("Request GWaas failed: %s - %s - %s", error.getBizCode(), error.getErrorCode(), error.getMessage()));
             }

@@ -1,4 +1,4 @@
-package com.geekwaas.core;
+package com.geekwaas.core.security;
 
 import java.nio.charset.StandardCharsets;
 import java.security.*;
