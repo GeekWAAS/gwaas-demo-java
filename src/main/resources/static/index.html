@@ -9,8 +9,8 @@
 </head>
 <body>
 <div class="container">
-    <form id="new-order-form row">
-        <div class="form-group">
+    <form id="new-order-form">
+        <div class="form-group row">
             <label class="col-md-3 col-form-label" for="currencyInput">Currency</label>
             <div class="col-md-9">
                 <input name="currency" id="currencyInput" type="text" value="USD" disabled class="form-control">
@@ -22,7 +22,7 @@
                 <input name="amount" id="amountInput" type="number" step="0.01" class="form-control">
             </div>
         </div>
-        <div class="form-group">
+        <div class="form-group row">
             <label class="col-md-3 col-form-label" for="methodSelect">Acquire Method</label>
             <div class="col-md-9">
                 <select name="method" id="methodSelect" class="form-control">
@@ -40,7 +40,7 @@
     const amountInput = document.getElementById('amountInput')
     const methodSelect = document.getElementById('methodSelect')
     submitBtn.onclick = async ()=>{
-        let resp = await sendAjaxRequest('/service/acquire-orders','POST',{amount:amountInput.value, acquireMethod:methodSelect})
+        let resp = await sendAjaxRequest('/service/acquire-orders','POST',{amount:amountInput.value, acquireMethod:methodSelect.value})
         console.log('response data',resp)
         location.href = resp.cashierUrl
     }
