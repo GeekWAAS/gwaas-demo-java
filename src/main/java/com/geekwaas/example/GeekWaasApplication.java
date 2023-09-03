@@ -50,7 +50,7 @@ public class GeekWaasApplication {
                 .enable(SerializationFeature.INDENT_OUTPUT)
                 .registerModule(new JavaTimeModule());
         context.addServlet(new ServletHolder(new NewOrderServlet(objectMapper, client)), "/acquire-orders");
-        context.addServlet(new ServletHolder(new NotifyServlet()),"/orders/**");
+        context.addServlet(new ServletHolder(new NotifyServlet()),"/orders/*");
     }
 
     private static GWaasClient initGwaasClient() throws IOException {
