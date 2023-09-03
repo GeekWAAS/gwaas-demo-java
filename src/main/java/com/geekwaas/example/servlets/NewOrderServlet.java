@@ -44,7 +44,7 @@ public class NewOrderServlet extends HttpServlet {
             String localhost = HttpUtils.resolveRequestHost(req);
             String notifyCallback = localhost + "/service/orders/" + referenceOrderNo + "/notify";
             String successCallback = localhost + "/result.html?order=" + referenceOrderNo;
-            String cancelCallback = localhost + "/cancel.html?order=" + referenceOrderNo;
+            String cancelCallback = localhost + "/result.html?order=" + referenceOrderNo;
             CreateAcquireOrderResponse orderResponse = client.request(new CreateAcquireOrderRequest(referenceOrderNo, title, currency, amount, GWaasAcquireMethod.valueOf(acquireMethod))
                     .setOrderDesc(orderDesc)
                     .setNotifyUrl(notifyCallback)

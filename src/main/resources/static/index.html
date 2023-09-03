@@ -3,8 +3,64 @@
 <head>
     <meta charset="UTF-8">
     <title>GWaas Order Demo</title>
+    <!-- CSS -->
+    <link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/4.6.2/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+
 </head>
 <body>
-Hello Jetty
+<div class="container">
+    <form id="new-order-form row">
+        <div class="form-group">
+            <label class="col-md-3 col-form-label" for="currencyInput">Currency</label>
+            <div class="col-md-9">
+                <input name="currency" id="currencyInput" type="text" value="USD" disabled class="form-control">
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-md-3 col-form-label" for="amountInput">Amount</label>
+            <div class="col-md-9">
+                <input name="amount" id="amountInput" type="number" step="0.01" class="form-control">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-3 col-form-label" for="methodSelect">Acquire Method</label>
+            <div class="col-md-9">
+                <select name="method" id="methodSelect" class="form-control">
+                    <option>CONTRACT</option>
+                    <option>TRANSFER</option>
+                </select>
+            </div>
+        </div>
+        <button type="button" class="btn btn-primary" id="submit-btn">Submit</button>
+    </form>
+</div>
 </body>
+<script type="text/javascript">
+    const submitBtn = document.getElementById('submit-btn')
+    const amountInput = document.getElementById('amountInput')
+    const methodSelect = document.getElementById('methodSelect')
+    submitBtn.onclick = async ()=>{
+        let resp = await sendAjaxRequest('/service/acquire-orders','POST',{amount:amountInput.value, acquireMethod:methodSelect})
+        console.log('response data',resp)
+        location.href = resp.cashierUrl
+    }
+
+    function sendAjaxRequest(url, method, data){
+        return new Promise((resolve, reject) => {
+            let xhr = new XMLHttpRequest()
+            xhr.open(method, url)
+            xhr.setRequestHeader('Content-Type', 'application/json')
+            xhr.responseType = 'json'
+            xhr.onload = function () {
+                const resp = xhr.response
+                resolve(resp)
+            }
+            if(data){
+                xhr.send(JSON.stringify(data))
+            }else {
+                xhr.send()
+            }
+        })
+    }
+</script>
 </html>
