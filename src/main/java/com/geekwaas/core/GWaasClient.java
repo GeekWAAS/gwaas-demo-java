@@ -45,6 +45,7 @@ public class GWaasClient {
 
         String payload = request.hasBody() ? "" : objectMapper.writeValueAsString(request);
         makeSignature(con, url, request.requestMethod(), payload);
+        logger.info("requesting {} - {} with request body: {}", request.requestMethod(), url, payload);
         if (request.hasBody()) {
             con.setRequestProperty("Content-Type", "application/json");
             con.setDoOutput(request.hasBody());
@@ -75,6 +76,7 @@ public class GWaasClient {
                         }, Map::putAll);
 
                 verifySignature(url, request.requestMethod(), authorizationParts, response);
+                logger.info("requesting {} - {} with request body: {}", request.requestMethod(), url, payload);
                 return objectMapper.readValue(response, request.responseType());
             }
         } else {
