@@ -17,6 +17,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
+import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -45,15 +46,21 @@ public class NewOrderServlet extends HttpServlet {
             String notifyCallback = localhost + "/service/orders/" + referenceOrderNo + "/notify";
             String successCallback = localhost + "/result.html?order=" + referenceOrderNo;
             String cancelCallback = localhost + "/result.html?order=" + referenceOrderNo;
-            CreateAcquireOrderResponse orderResponse = client.request(new CreateAcquireOrderRequest(referenceOrderNo, title, currency, amount, GWaasAcquireMethod.valueOf(acquireMethod))
+            CreateAcquireOrderRequest request = new CreateAcquireOrderRequest(referenceOrderNo, title, currency, amount, GWaasAcquireMethod.valueOf(acquireMethod))
                     .setOrderDesc(orderDesc)
                     .setNotifyUrl(notifyCallback)
                     .setSuccessCallbackUrl(successCallback)
-                    .setCancelCallbackUrl(cancelCallback));
-
+                    .setCancelCallbackUrl(cancelCallback);
+            DemoServletResponse servletResp = new DemoServletResponse();
+            servletResp.setRequestBody(client.serializeRequestBody(request))
+                    .setRequestUrl(client.getUrl(request).toString())
+                    .setRequestMethod(request.requestMethod());
+            CreateAcquireOrderResponse orderResponse = client.request(request);
+            servletResp.setResponseBody(orderResponse.getRawResponse());
+            servletResp.setCallbackData(Map.of("cashierUrl", orderResponse.getOrder().getCashierUrl()));
             resp.setHeader("Content-Type", "application/json");
             try (Writer out = resp.getWriter()) {
-                out.write(String.format("{\"cashierUrl\":\"%s\"}", orderResponse.getOrder().getCashierUrl()));
+                out.write(objectMapper.writeValueAsString(servletResp));
             }
         }
     }
@@ -61,10 +68,17 @@ public class NewOrderServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String orderId = req.getParameter("orderId");
-        CheckOrderStatusResponse response = client.request(new CheckOrderStatusRequest(orderId));
+        CheckOrderStatusRequest request = new CheckOrderStatusRequest(orderId);
+        CheckOrderStatusResponse response = client.request(request);
+        DemoServletResponse servletResp = new DemoServletResponse();
+        servletResp.setRequestBody(client.serializeRequestBody(request))
+                .setRequestUrl(client.getUrl(request).toString())
+                .setRequestMethod(request.requestMethod())
+                .setResponseBody(response.getRawResponse())
+                .setCallbackData(response);
         resp.setHeader("Content-Type", "application/json");
         try (Writer out = resp.getWriter()) {
-            out.write(objectMapper.writeValueAsString(response));
+            out.write(objectMapper.writeValueAsString(servletResp));
         }
     }
 }

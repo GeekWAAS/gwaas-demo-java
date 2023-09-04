@@ -5,11 +5,22 @@ import com.geekwaas.core.entity.AcquireNewOrderInfo;
 import com.geekwaas.core.entity.GWaasBizResult;
 
 public class CreateAcquireOrderResponse implements GWaasResponse {
+    private String rawResponse;
     private GWaasBizResult bizResult;
     private AcquireNewOrderInfo order;
     @Override
     public GWaasBizResult getBizResult() {
         return bizResult;
+    }
+
+    @Override
+    public void setRawResponse(String rawResponse) {
+        this.rawResponse = rawResponse;
+    }
+
+    @Override
+    public String getRawResponse() {
+        return rawResponse;
     }
 
     public CreateAcquireOrderResponse setBizResult(GWaasBizResult bizResult) {

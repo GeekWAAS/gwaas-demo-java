@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <title>GWaas Order Demo</title>
     <!-- CSS -->
-    <link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/4.6.2/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+    <link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/4.6.2/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
 
 </head>
 <body>
@@ -33,19 +34,54 @@
         </div>
         <button type="button" class="btn btn-primary" id="submit-btn">Submit</button>
     </form>
+    <div id="response" class="hidden">
+        <div class="row">
+            <div class="col-md-12">
+                <h3>Api Request Detail</h3>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3" id="reqMethod"></div>
+            <div class="col-md-9" id="reqUrl"></div>
+            <div>Request Body:</div>
+            <pre id="reqBody"></pre>
+            <div>Response Body:</div>
+            <pre id="respBody"></pre>
+        </div>
+        <a target="_blank" id="redirectLink"></a>
+    </div>
 </div>
 </body>
 <script type="text/javascript">
     const submitBtn = document.getElementById('submit-btn')
     const amountInput = document.getElementById('amountInput')
     const methodSelect = document.getElementById('methodSelect')
-    submitBtn.onclick = async ()=>{
-        let resp = await sendAjaxRequest('/service/acquire-orders','POST',{amount:amountInput.value, acquireMethod:methodSelect.value})
-        console.log('response data',resp)
-        location.href = resp.cashierUrl
+    const responseContainer = document.getElementById('response')
+    const reqMethod = document.getElementById('reqMethod')
+    const reqUrl = document.getElementById('reqUrl')
+    const reqBody = document.getElementById('reqBody')
+    const respBody = document.getElementById('respBody')
+
+    const link = document.getElementById('redirectLink')
+    submitBtn.onclick = async () => {
+        responseContainer.className = 'hidden'
+        let resp = await sendAjaxRequest('/service/acquire-orders', 'POST', {
+            amount: amountInput.value,
+            acquireMethod: methodSelect.value
+        })
+        console.log('response data', resp)
+        reqMethod.innerText = resp.requestMethod
+        reqUrl.innerText = resp.requestUrl
+        reqBody.innerText = resp.requestBody
+        respBody.innerText = resp.responseBody
+        if (resp.callbackData){
+            link.href = resp.callbackData.cashierUrl
+            link.innerText = resp.callbackData.cashierUrl
+        }
+        responseContainer.className = ''
     }
 
-    function sendAjaxRequest(url, method, data){
+    function sendAjaxRequest(url, method, data) {
         return new Promise((resolve, reject) => {
             let xhr = new XMLHttpRequest()
             xhr.open(method, url)
@@ -55,9 +91,9 @@
                 const resp = xhr.response
                 resolve(resp)
             }
-            if(data){
+            if (data) {
                 xhr.send(JSON.stringify(data))
-            }else {
+            } else {
                 xhr.send()
             }
         })
