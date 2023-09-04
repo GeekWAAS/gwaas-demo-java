@@ -1,5 +1,7 @@
 package com.geekwaas.core;
 
+import java.util.Locale;
+import java.util.Map;
 import java.util.Properties;
 
 public class GWaasClientConfig {
@@ -18,7 +20,9 @@ public class GWaasClientConfig {
     }
 
     private static String loadProperty(Properties prop, String configKey) {
-        String propValue = prop.getProperty(configKey);
+        String sysEnvKey = configKey.toUpperCase(Locale.ROOT).replace(".", "_");
+        String sysEnvValue = System.getenv(sysEnvKey);
+        String propValue = sysEnvValue == null ? prop.getProperty(configKey) : sysEnvValue;
         if (propValue == null) {
             throw new RuntimeException(configKey + " required in configuration");
         }
