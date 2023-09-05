@@ -40,8 +40,8 @@ public class NewOrderServlet extends HttpServlet {
             String title = "Test order";
             String orderDesc = "Test order description";
             String currency = "USD";
-            BigDecimal amount = body.get("amount").decimalValue();
-            String acquireMethod = body.get("acquireMethod").asText();
+            BigDecimal amount = new BigDecimal(body.get("amount").textValue());
+            String acquireMethod = body.get("acquireMethod").textValue();
             String localhost = HttpUtils.resolveRequestHost(req);
             String notifyCallback = localhost + "/service/orders/" + referenceOrderNo + "/notify";
             String successCallback = localhost + "/result.html?order=" + referenceOrderNo;
