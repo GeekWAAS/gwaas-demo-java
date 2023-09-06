@@ -14,14 +14,15 @@ public class AcquireOrderInfo {
     private Long chainId;
     private GWaasCurrencyType paymentCurrencyType;
     private String paymentCurrency;
-    private String contractAddress;
+    private Integer paymentCurrencyDigits;
+    private String tokenContractAddress;
     private BigDecimal exchangeRate;
-    private BigInteger paymentAmount;
-    private BigInteger actualPaymentAmount;
+    private BigInteger cryptoOrderAmountWei;
+    private BigInteger cryptoPaidAmountWei;
     private Instant createTime;
     private Instant expireTime;
-    private Instant completeTime;
-    private String transactionHash;
+    private Instant confirmTime;
+    private String paymentTransactionHash;
     private String cashierUrl;
 
     public String getOrderId() {
@@ -105,12 +106,12 @@ public class AcquireOrderInfo {
         return this;
     }
 
-    public String getContractAddress() {
-        return contractAddress;
+    public String getTokenContractAddress() {
+        return tokenContractAddress;
     }
 
-    public AcquireOrderInfo setContractAddress(String contractAddress) {
-        this.contractAddress = contractAddress;
+    public AcquireOrderInfo setTokenContractAddress(String tokenContractAddress) {
+        this.tokenContractAddress = tokenContractAddress;
         return this;
     }
 
@@ -123,21 +124,21 @@ public class AcquireOrderInfo {
         return this;
     }
 
-    public BigInteger getPaymentAmount() {
-        return paymentAmount;
+    public BigInteger getCryptoOrderAmountWei() {
+        return cryptoOrderAmountWei;
     }
 
-    public AcquireOrderInfo setPaymentAmount(BigInteger paymentAmount) {
-        this.paymentAmount = paymentAmount;
+    public AcquireOrderInfo setCryptoOrderAmountWei(BigInteger cryptoOrderAmountWei) {
+        this.cryptoOrderAmountWei = cryptoOrderAmountWei;
         return this;
     }
 
-    public BigInteger getActualPaymentAmount() {
-        return actualPaymentAmount;
+    public BigInteger getCryptoPaidAmountWei() {
+        return cryptoPaidAmountWei;
     }
 
-    public AcquireOrderInfo setActualPaymentAmount(BigInteger actualPaymentAmount) {
-        this.actualPaymentAmount = actualPaymentAmount;
+    public AcquireOrderInfo setCryptoPaidAmountWei(BigInteger cryptoPaidAmountWei) {
+        this.cryptoPaidAmountWei = cryptoPaidAmountWei;
         return this;
     }
 
@@ -159,21 +160,21 @@ public class AcquireOrderInfo {
         return this;
     }
 
-    public Instant getCompleteTime() {
-        return completeTime;
+    public Instant getConfirmTime() {
+        return confirmTime;
     }
 
-    public AcquireOrderInfo setCompleteTime(Instant completeTime) {
-        this.completeTime = completeTime;
+    public AcquireOrderInfo setConfirmTime(Instant confirmTime) {
+        this.confirmTime = confirmTime;
         return this;
     }
 
-    public String getTransactionHash() {
-        return transactionHash;
+    public String getPaymentTransactionHash() {
+        return paymentTransactionHash;
     }
 
-    public AcquireOrderInfo setTransactionHash(String transactionHash) {
-        this.transactionHash = transactionHash;
+    public AcquireOrderInfo setPaymentTransactionHash(String paymentTransactionHash) {
+        this.paymentTransactionHash = paymentTransactionHash;
         return this;
     }
 
@@ -183,6 +184,15 @@ public class AcquireOrderInfo {
 
     public AcquireOrderInfo setCashierUrl(String cashierUrl) {
         this.cashierUrl = cashierUrl;
+        return this;
+    }
+
+    public Integer getPaymentCurrencyDigits() {
+        return paymentCurrencyDigits;
+    }
+
+    public AcquireOrderInfo setPaymentCurrencyDigits(Integer paymentCurrencyDigits) {
+        this.paymentCurrencyDigits = paymentCurrencyDigits;
         return this;
     }
 }
